@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins";
 import { db } from "@/server/drizzle/db";
 import * as schema from "@/server/models";
+import { Context } from "elysia";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -22,7 +22,23 @@ export const auth = betterAuth({
   plugins: [
     username({
       minUsernameLength: 5,
+      maxUsernameLength: 20,
     }),
-    nextCookies(),
   ],
+  advanced: {
+    disableCSRFCheck: false,
+  },
 });
+
+export type Auth = typeof auth;
+
+export const betterAuthView = (context: Context) => {
+  const BETTER_AUTH_ACCEPT_METHODS = ["POST", "GET"];
+  // validate request method
+  if (BETTER_AUTH_ACCEPT_METHODS.includes(context.request.method)) {
+    return auth.handler(context.request);
+  } else {
+    context.set.status = 405;
+    return "Method not allowed";
+  }
+};
