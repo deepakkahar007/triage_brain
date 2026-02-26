@@ -1,27 +1,17 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
-import { auth } from "./auth/better_auth";
-import { authMiddleware } from "./middleware/auth-middleware";
-import { authRoutes } from "./routes/authRoutes";
-import { protectedRoutes } from "./routes/protectedRoutes";
+import { betterAuthHandler } from "./auth/authHandler";
 
 const app = new Elysia({ prefix: "/api" })
   .use(
     cors({
       origin: "http://localhost:3000",
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],
     }),
   )
-  // Mount Better-auth handler
-  .mount(auth.handler)
-  // Use auth middleware
-  .use(authMiddleware)
-  // Mount auth routes
-  .use(authRoutes)
-  // Mount example protected routes
-  .use(protectedRoutes)
+  .all("/auth/*", betterAuthHandler)
 
   // Public route
   .get("/", () => ({

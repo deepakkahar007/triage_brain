@@ -5,6 +5,8 @@ import { db } from "@/server/drizzle/db";
 import * as schema from "@/server/models";
 import { Context } from "elysia";
 
+// in future implement the admina nd organization plugin
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -18,6 +20,16 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+  },
+  socialProviders: {
+    google: {
+      clientId: "",
+      clientSecret: "",
+    },
+    microsoft: {
+      clientId: "",
+      clientSecret: "",
+    },
   },
   plugins: [
     username({
