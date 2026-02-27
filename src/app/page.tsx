@@ -3,9 +3,13 @@
 // import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { api } from "@/lib/eden";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const protect = await api.protected.data.get();
+  console.log("protext ", protect);
+
   // const session = await auth.api.getSession({
   //   headers: await headers(),
   // });

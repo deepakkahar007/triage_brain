@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { auth } from "@/server/auth/better_auth";
 
 export default async function proxy(request: NextRequest) {
   console.log("proxy runnes", request.url);
+
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+  console.log(session);
+
+  if (!session) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   // Check if we're trying to access a protected route
   // if (request.nextUrl.pathname.startsWith("/dashboard")) {

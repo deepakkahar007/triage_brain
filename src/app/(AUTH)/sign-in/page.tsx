@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, signUp, signOut } from "@/lib/auth-client";
+import { signIn, signUp, signOut, useSession } from "@/lib/auth-client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -31,6 +31,9 @@ const UserFormSchema = z.object({
 });
 
 const SignInPage = () => {
+  const session = useSession();
+  console.log(session);
+
   const form = useForm<z.infer<typeof UserFormSchema>>({
     resolver: zodResolver(UserFormSchema),
     defaultValues: {

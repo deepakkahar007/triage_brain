@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { betterAuthHandler } from "./auth/authHandler";
+import { protectedRoutes } from "./routes/protectedRoutes";
 
 const app = new Elysia({ prefix: "/api" })
   .use(
@@ -12,6 +13,7 @@ const app = new Elysia({ prefix: "/api" })
     }),
   )
   .all("/auth/*", betterAuthHandler)
+  .use(protectedRoutes)
 
   // Public route
   .get("/", () => ({
