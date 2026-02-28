@@ -3,6 +3,9 @@ import {
   SessionTable,
   AccountTable,
   VerificationTable,
+  InvitationTable,
+  MemberTable,
+  OrganizationTable as OrganizationTableDb,
 } from "./AuthTable";
 import { AiDecisionTable } from "./AiDecisionTable";
 import { AiFeedbackTable } from "./AiFeedbackTable";
@@ -21,6 +24,9 @@ import {
 } from "./drizzleHelper";
 
 export {
+  InvitationTable,
+  OrganizationTableDb,
+  MemberTable,
   UserTable,
   SessionTable,
   AccountTable,

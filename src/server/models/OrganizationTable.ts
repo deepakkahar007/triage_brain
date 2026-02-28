@@ -3,7 +3,7 @@ import { createdAt, id, planEnum, updatedAt } from "./drizzleHelper";
 
 // Each customer company.
 
-export const OrganizationTable = pgTable("organization", {
+export const OrganizationTable = pgTable("user_organization", {
   id,
 
   name: varchar().notNull(),

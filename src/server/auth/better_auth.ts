@@ -1,13 +1,19 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { username } from "better-auth/plugins";
+import { username, organization } from "better-auth/plugins";
 import { db } from "@/server/drizzle/db";
 import * as schema from "@/server/models";
 import { Context } from "elysia";
+import { ac, superadmin, admin, agent, owner, viewer } from "@/lib/permissions";
 
 // in future implement the admina nd organization plugin
 
 export const auth = betterAuth({
+  user: {
+    additionalFields: {
+      role: { type: ["owner", "admin", "agent", "viewer"], input: false },
+    },
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -18,6 +24,7 @@ export const auth = betterAuth({
       account: schema.AccountTable,
     },
   }),
+
   emailAndPassword: {
     enabled: true,
   },
@@ -36,9 +43,34 @@ export const auth = betterAuth({
       minUsernameLength: 5,
       maxUsernameLength: 20,
     }),
+
+    organization({
+      ac,
+      roles: {
+        superadmin,
+        owner,
+        admin,
+        agent,
+        viewer,
+      },
+    }),
   ],
   advanced: {
     disableCSRFCheck: false,
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          return {
+            data: {
+              ...user,
+              role: user.role || "owner",
+            },
+          };
+        },
+      },
+    },
   },
 });
 
