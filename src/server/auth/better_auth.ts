@@ -1,10 +1,11 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { username, organization } from "better-auth/plugins";
+import { organization } from "better-auth/plugins";
 import { db } from "@/server/drizzle/db";
 import * as schema from "@/server/models";
 import { Context } from "elysia";
 import { ac, superadmin, admin, agent, owner, viewer } from "@/lib/permissions";
+import { env } from "@/env/envSchema";
 
 // in future implement the admina nd organization plugin
 
@@ -30,20 +31,12 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: "",
-      clientSecret: "",
-    },
-    microsoft: {
-      clientId: "",
-      clientSecret: "",
+      prompt: "select_account",
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
   plugins: [
-    username({
-      minUsernameLength: 5,
-      maxUsernameLength: 20,
-    }),
-
     organization({
       ac,
       roles: {

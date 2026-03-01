@@ -10,6 +10,8 @@ export const env = createEnv({
     DB_NAME: z.string(),
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_URL: z.string(),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string(),
   },
   emptyStringAsUndefined: true,
   experimental__runtimeEnv: process.env,

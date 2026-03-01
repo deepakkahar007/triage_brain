@@ -18,8 +18,6 @@ export const UserTable = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
-  username: text("username").unique(),
-  displayUsername: text("display_username"),
   role: text("role", { enum: ["owner", "admin", "agent", "viewer"] }),
 });
 

@@ -2,6 +2,15 @@ import { defineRelations } from "drizzle-orm/relations";
 import * as schema from "./index";
 
 export const relations = defineRelations(schema, (r) => ({
+  // organization relations
+  OrganizationTable: {
+    user: r.one.UserTable({
+      from: r.OrganizationTable.userId,
+      to: r.UserTable.id,
+    }),
+  },
+
+  // better auth relations
   UserTable: {
     sessions: r.many.SessionTable(),
     accounts: r.many.AccountTable(),
