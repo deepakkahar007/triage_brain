@@ -8,13 +8,15 @@ export default async function Home() {
   const session = await getUserServerSession();
   // this will be my landing page the user first visit here and then log in using the provider and then redirect to the home page
 
-  const org = await api.organization.create.post({
-    name: "deee",
-    slug: "       deepak",
-    plan: "free",
-    ticket_quota: 100,
-    userId: "LqqJS0XUsVks7CSv3qfvOInkOdg3E5w2              ",
-  });
+  // const org = await api.organization.create.post({
+  //   name: "deee",
+  //   slug: "       deepak",
+  //   plan: "free",
+  //   ticket_quota: 100,
+  //   userId: "LqqJS0XUsVks7CSv3qfvOInkOdg3E5w2              ",
+  // });
+
+  const org = await api.organization.all.get();
 
   console.log(org.data);
 
