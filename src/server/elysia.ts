@@ -14,8 +14,6 @@ const app = new Elysia({ prefix: "/api" })
       return error.toResponse();
     }
 
-    console.error("Unhandled error:", error);
-
     return Response.json(
       {
         status: false,
