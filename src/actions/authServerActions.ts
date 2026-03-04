@@ -1,6 +1,7 @@
 "use server";
 
 import { authClient } from "@/lib/auth-client";
+import { api } from "@/lib/eden";
 import { auth } from "@/server/auth/better_auth";
 import { headers } from "next/headers";
 
@@ -27,4 +28,9 @@ export const signOutServerUser = async () => {
   });
 
   return session;
+};
+
+export const getAllOrg = async () => {
+  const res = await api.organization.all.get();
+  return res.data;
 };

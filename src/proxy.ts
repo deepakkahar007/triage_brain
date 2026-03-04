@@ -10,9 +10,9 @@ export default async function proxy(request: NextRequest) {
   });
   console.log(session);
 
-  if (!session) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // if (!session) {
+  //   return NextResponse.redirect(new URL("/", request.url));
+  // }
 
   // Check if we're trying to access a protected route
   // if (request.nextUrl.pathname.startsWith("/dashboard")) {

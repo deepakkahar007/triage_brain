@@ -1,6 +1,5 @@
 "use client";
 
-import type { InsertOrganizationTableType } from "@/server/models/OrganizationTable";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -33,13 +32,13 @@ import { Button } from "../ui/button";
 import { PLANS } from "@/constant";
 import { useSession } from "@/lib/auth-client";
 import { api } from "@/lib/eden";
+import { getAllOrg } from "@/actions/authServerActions";
 
 const CreateOrgFormSchema = z.object({
   name: z.string(),
-  slug: z.string(),
   userId: z.string(),
   plan: z.enum(["free", "starter", "pro"]),
-}) satisfies z.ZodType<InsertOrganizationTableType>;
+});
 
 type CreateOrgFormSchemaType = z.infer<typeof CreateOrgFormSchema>;
 
@@ -65,12 +64,11 @@ const CreateOrganizationForm = () => {
     defaultValues: {
       name: "",
       plan: "free",
-      slug: "",
       userId: "",
     },
   });
 
-  function onSubmit(data: CreateOrgFormSchemaType) {
+  async function onSubmit(data: CreateOrgFormSchemaType) {
     console.log({
       name: data.name,
       slug: data.name,
@@ -78,23 +76,10 @@ const CreateOrganizationForm = () => {
       ticket_quota: getTicketQuota(data.plan),
       userId: session?.data?.user.id || "no id found",
     });
-    // console.log(session);
-    // const res = api.organization.create.post({
-    //   //   name: data.name,
-    //   //   slug: data.name,
-    //   //   plan: data.plan,
-    //   //   ticket_quota: getTicketQuota(data.plan),
-    //   //   userId: session?.data?.user.id || "no id found",
-    //   name: "worker",
-    //   slug: "worker",
-    //   plan: "free",
-    //   ticket_quota: 100,
-    //   userId: "LqqJS0XUsVks7CSv3qfvOInkOdg3E5w2",
-    // });
-    // console.log(res.data);
-    // if (res.status) {
-    //   toast(res.data?.message);
-    // }
+
+    const res = await getAllOrg();
+
+    console.log(res);
   }
 
   return (
