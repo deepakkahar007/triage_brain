@@ -21,6 +21,7 @@ export default async function Home() {
 
   // console.log(org.data);
 
+  // console.log(session);
   return (
     <div>
       <h1>hello {session?.user.name}</h1>

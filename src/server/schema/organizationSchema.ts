@@ -16,6 +16,7 @@ export const createOrganizationSchema = createInsertSchema(OrganizationTable, {
 export const createOrganizationResponseSchema = z
   .object({
     message: z.string().trim(),
+    id: z.uuid(),
   })
   .strip();
 

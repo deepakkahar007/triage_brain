@@ -23,7 +23,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -31,8 +30,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { PLANS } from "@/constant";
 import { useSession } from "@/lib/auth-client";
-import { api } from "@/lib/eden";
-import { getAllOrg } from "@/actions/authServerActions";
+import {
+  createOrganization,
+  setActiveOrganizationId,
+} from "@/actions/authServerActions";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 const CreateOrgFormSchema = z.object({
   name: z.string(),
@@ -57,7 +60,7 @@ const getTicketQuota = (plan: string) => {
 };
 
 const CreateOrganizationForm = () => {
-  const session = useSession();
+  const { data: session } = useSession();
 
   const form = useForm<CreateOrgFormSchemaType>({
     resolver: zodResolver(CreateOrgFormSchema),
@@ -69,17 +72,26 @@ const CreateOrganizationForm = () => {
   });
 
   async function onSubmit(data: CreateOrgFormSchemaType) {
-    console.log({
+    const res = await createOrganization({
       name: data.name,
       slug: data.name,
       plan: data.plan,
       ticket_quota: getTicketQuota(data.plan),
-      userId: session?.data?.user.id || "no id found",
+      userId: session?.user.id || "no id found",
     });
 
-    const res = await getAllOrg();
+    if (res.status) {
+      toast.success(res?.data?.message);
+      form.reset();
 
-    console.log(res);
+      await setActiveOrganizationId(res.data?.id || "");
+
+      setTimeout(() => {
+        redirect("/home");
+      }, 500);
+    } else {
+      toast.error("Something went wrong");
+    }
   }
 
   return (

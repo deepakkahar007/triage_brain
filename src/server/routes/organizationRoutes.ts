@@ -31,10 +31,14 @@ export const OrganizationRoutes = new Elysia({
 
       const uniqueSlug = createUniqueOrganizationSlug(body.name);
 
-      await createOrganizationMutation({ ...body, slug: uniqueSlug });
+      const organization = await createOrganizationMutation({
+        ...body,
+        slug: uniqueSlug,
+      });
 
       return {
         message: "Organization created successfully",
+        id: organization.id,
       };
     },
     {
